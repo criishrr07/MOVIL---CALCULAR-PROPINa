@@ -120,6 +120,9 @@ fun TipTimeLayout() {
         EditNumberField(
             label = R.string.bill_amount,
             value = amountInput,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Next
             onValueChanged = { amountInput = it },
             modifier = Modifier
                 .padding(bottom = 32.dp)
@@ -127,6 +130,9 @@ fun TipTimeLayout() {
         )
         EditNumberField(
             label = R.string.how_was_the_service,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Done
             value = tipInput,
             onValueChanged = { tipInput = it },
             modifier = Modifier
@@ -145,6 +151,7 @@ fun TipTimeLayout() {
 fun EditNumberField(
     label: Int,
     @StringRes label: Int,
+    keyboardOptions: KeyboardOptions,
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier) {
@@ -161,6 +168,10 @@ fun EditNumberField(
         singleLine = true,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         modifier = modifier
+                keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number,
+        imeAction = ImeAction.Next
+                keyboardOptions = keyboardOptions
     )
 }
 
