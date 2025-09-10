@@ -47,6 +47,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tiptime.ui.theme.TipTimeTheme
 import java.text.NumberFormat
+import androidx.annotation.StringRes
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -99,45 +100,59 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun TipTimeLayout() {
+    var amountInput by remember { mutableStateOf("") }
+    var tipInput by remember { mutableStateOf("") }
+    val amount = amountInput.toDoubleOrNull() ?: 0.0
+    val tipPercent = tipInput.toDoubleOrNull() ?: 0.0
+
+    val tip = calculateTip(amount, tipPercent)
     Column(
-        modifier = Modifier
-            .statusBarsPadding()
-            .padding(horizontal = 40.dp)
-            .safeDrawingPadding(),
+        modifier = Modifier.padding(40.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        var amountInput by remember { mutableStateOf("") }
-        val amount = amountInput.toDoubleOrNull() ?: 0.0
-        val tip = calculateTip(amount)
-
         Text(
             text = stringResource(R.string.calculate_tip),
             modifier = Modifier
-                .padding(bottom = 16.dp, top = 40.dp)
+                .padding(bottom = 16.dp)
                 .align(alignment = Alignment.Start)
         )
         EditNumberField(
+            label = R.string.bill_amount,
             value = amountInput,
-            onValueChange = { amountInput = it },
-            modifier = Modifier.padding(bottom = 32.dp).fillMaxWidth())
+            onValueChanged = { amountInput = it },
+            modifier = Modifier
+                .padding(bottom = 32.dp)
+                .fillMaxWidth()
+        )
+        EditNumberField(
+            label = R.string.how_was_the_service,
+            value = tipInput,
+            onValueChanged = { tipInput = it },
+            modifier = Modifier
+                .padding(bottom = 32.dp)
+                .fillMaxWidth()
+        )
         Text(
-            text = stringResource(R.string.tip_amount,tip ),
+            text = stringResource(R.string.tip_amount, tip),
             style = MaterialTheme.typography.displaySmall
         )
         Spacer(modifier = Modifier.height(150.dp))
-
     }
 }
 
 @Composable
 fun EditNumberField(
+    label: Int,
+    @StringRes label: Int,
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier) {
 
+
     TextField(
         value = value,
+        label = { Text(stringResource(label)) },
         //onValueChange = {    Log.d("CambioCaja", it)  },
         //onValueChange = { el -> Log.d("CambioCaja", el)  },
         //onValueChange = {amountInput = it                         },
